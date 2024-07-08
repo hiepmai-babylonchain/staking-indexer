@@ -19,6 +19,7 @@ jobs:
           name: staking-indexer
           path: /tmp/
           run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Load Docker image
         run: docker load -i /tmp/staking-indexer.tar
