@@ -1,7 +1,7 @@
 name: ci
 
 on:
-  push:
+  pull_request:
     branches:
     - '**'
     tags:
@@ -15,7 +15,7 @@ jobs:
      test-commands: 'make test; make test-e2e'
      
   docker_build:
-    uses: hiepmai-babylonchain/.github/.github/workflows/reusable_docker_build.yml@hiep/add-reusable-workflows
+    uses: hiepmai-babylonchain/.github/.github/workflows/reusable_docker_pipeline.yml@hiep/add-reusable-workflows
     secrets: inherit
     with:
-     image_name: 'staking-indexer'
+     publish: false
