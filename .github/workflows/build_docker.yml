@@ -18,6 +18,7 @@ jobs:
     with:
      image_name: 'staking-indexer'
   docker_push:
+    needs: [push_docker, docker_build]
     uses: hiepmai-babylonchain/.github/.github/workflows/reusable_docker_push.yml@hiep/add-reusable-workflows
     secrets: inherit
     with:
