@@ -1,7 +1,7 @@
 name: build_docker
 
 on:
-  push:
+  pull_request:
     branches:
     - '**'
     tags:
@@ -14,12 +14,6 @@ jobs:
      install-dependencies-command: 'sudo apt-get install libzmq3-dev'
   docker_build:
     uses: hiepmai-babylonchain/.github/.github/workflows/reusable_docker_build.yml@hiep/add-reusable-workflows
-    secrets: inherit
-    with:
-     image_name: 'staking-indexer'
-  docker_push:
-    needs: [push_docker, docker_build]
-    uses: hiepmai-babylonchain/.github/.github/workflows/reusable_docker_push.yml@hiep/add-reusable-workflows
     secrets: inherit
     with:
      image_name: 'staking-indexer'
