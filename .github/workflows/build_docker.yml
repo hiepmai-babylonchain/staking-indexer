@@ -8,10 +8,10 @@ on:
     - '**'
 jobs:
   build_lint_test:
-    uses: hiepmai-babylonchain/.github/blob/hiep/add-reusable-workflows/.github/workflows/reusable_go_lint_test.yml@hiep/add-reusable-workflows
+    uses: hiepmai-babylonchain/.github/.github/workflows/reusable_go_lint_test.yml@hiep/add-reusable-workflows
     secrets: inherit
   docker_build:
-    uses: hiepmai-babylonchain/.github/blob/hiep/add-reusable-workflows/.github/workflows/reusable_docker_build.yml@hiep/add-reusable-workflows
+    uses: hiepmai-babylonchain/.github/.github/workflows/reusable_docker_build.yml@hiep/add-reusable-workflows
     secrets: inherit
     with:
      image_name: 'staking-indexer'
