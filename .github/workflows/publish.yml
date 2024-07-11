@@ -15,7 +15,7 @@ jobs:
      run-unit-tests: true
      run-integration-tests: true
      
-  docker_publish:
+  docker_pipeline:
     needs: ["lint_test"]
     uses: hiepmai-babylonchain/.github/.github/workflows/reusable_docker_pipeline.yml@hiep/add-reusable-workflows
     secrets: inherit
