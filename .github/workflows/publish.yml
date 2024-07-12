@@ -8,16 +8,16 @@ on:
     - '**'
 jobs:
   lint_test:
-    uses: babylonchain/.github/.github/workflows/reusable_go_lint_test.yml@hiep/add-reusable-workflows
-    secrets: inherit
+    uses: hiepmai-babylonchain/.github/.github/workflows/reusable_go_lint_test.yml@hiep/add-reusable-workflows
     with:
      install-dependencies-command: 'sudo apt-get install libzmq3-dev'
      run-unit-tests: true
      run-integration-tests: true
-     
+     run-lint: true
+
   docker_pipeline:
     needs: ["lint_test"]
-    uses: babylonchain/.github/.github/workflows/reusable_docker_pipeline.yml@hiep/add-reusable-workflows
+    uses: hiepmai-babylonchain/.github/.github/workflows/reusable_docker_pipeline.yml@hiep/add-reusable-workflows
     secrets: inherit
     with:
-     publish: true
+     publish: false
