@@ -19,4 +19,3 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           FROM_BRANCH: "hiep/add-github-actions"
           TO_BRANCH: "dev"
-          CONTENT_COMPARISON: true
