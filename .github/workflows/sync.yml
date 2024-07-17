@@ -1,0 +1,32 @@
+name: Create Pull Request from dev to main
+
+on:
+ workflow_dispatch:
+   inputs:
+    baseBranch:
+      description: 'Base branch'
+      required: true
+      default: 'dev'
+    targetBranch:
+      description: 'Target branch'
+      required: true
+      default: 'main'
+    reviewers:
+      description: "Reviewer"
+      type: string
+      default: ""
+
+jobs:
+  create_pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: 'Sync from ${{ baseBranch }} to ${{ targetBranch }}'
+          reviewers: ${{ reviewers }}
+          
+        
