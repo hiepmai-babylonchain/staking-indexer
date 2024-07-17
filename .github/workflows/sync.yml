@@ -17,5 +17,6 @@ jobs:
           base: dev
           branch: hiep/add-github-actions
           reviewers: hiepmai-babylonchain
+          title: Automated PR from hiep/add-github-actions to dev
 
         
