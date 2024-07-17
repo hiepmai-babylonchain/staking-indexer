@@ -1,0 +1,32 @@
+name: Dispatch Reusable Workflows
+
+on:
+  workflow_call:
+    inputs:
+      reusable_go_lint_test:
+        required: true
+        type: string
+      reusable_docker_pipeline:
+        required: true
+        type: string
+      publish:
+        required: true
+        type: boolean
+      dockerfile:
+        required: true
+        type: string
+
+jobs:
+  lint_test:
+    uses: ${{ inputs.reusable_go_lint_test }}
+    with:
+      run-unit-tests: true
+      run-integration-tests: false
+      run-lint: false
+
+  docker_pipeline:
+    uses: ${{ inputs.reusable_docker_pipeline }}
+    secrets: inherit
+    with:
+      publish: ${{ inputs.publish }}
+      dockerfile: ${{ inputs.dockerfile }}
