@@ -37,14 +37,15 @@ jobs:
           if [ -n "$pr_exists" ]; then
             echo "A pull request already exists: #$pr_exists"
           else
-            gh pr create --base "$target_branch" \
-            --head "$base_branch" \
-            --title "Sync from $base_branch to $target_branch" \
-            --body "This PR synchronizes changes from $base_branch to $target_branch." \
-            --repo "$repo" \
-            --reviewer "$reviewers"
-            
+            gh pr create --base "$target_branch" --head "$base_branch" --title "Sync from $base_branch to $target_branch" --body "This PR synchronizes changes from $base_branch to $target_branch." --repo "$repo"
             echo "Pull request created successfully."
+            
+            if [ -n "$reviewers" ]; then
+              IFS=',' read -r -a reviewers_array <<< "$reviewers"
+              for reviewer in "${reviewers_array[@]}"; do
+                gh pr review-request --repo "$repo" --add "$reviewer" "$pr_url"
+              done
+            fi
 
             gh pr merge "$pr_url" --"$merge_strategy" --repo "$repo"
           fi
