@@ -10,12 +10,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Set up Node
-        uses: actions/setup-node@v4
-      - name: Opening pull request
-        id: pull
-        uses: tretuna/sync-branches@1.4.0
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
         with:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          FROM_BRANCH: "hiep/add-github-actions"
-          TO_BRANCH: "dev"
+          token: ${{ secrets.PAT }}
+          base: dev
+          branch: hiep/add-github-actions
+          reviewers: hiepmai-babylonchain
+
+        
