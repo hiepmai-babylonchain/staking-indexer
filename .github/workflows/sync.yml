@@ -30,7 +30,9 @@ jobs:
         run: |
           base_branch="${{ github.event.inputs.base_branch }}"
           target_branch="${{ github.event.inputs.target_branch }}"
+          reviewers="${{ github.event.inputs.reviewers }}"
           repo="${{ github.repository }}"
+          merge_strategy="${{ github.event.inputs.merge_strategy }}"
 
           pr_exists=$(gh pr list --base "$target_branch" --head "$base_branch" --repo "$repo" --json number --jq '.[0].number')
 
