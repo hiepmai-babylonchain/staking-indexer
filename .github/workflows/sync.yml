@@ -26,6 +26,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Set up GitHub CLI
+        uses: actions/setup-gh@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Check for existing PR and create if not exists
         run: |
           base_branch="${{ github.event.inputs.base_branch }}"
@@ -48,7 +52,5 @@ jobs:
             fi
 
             gh pr merge "$pr_url" --"$merge_strategy" --repo "$repo"
-          fi
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          fi          
         
