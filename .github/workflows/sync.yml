@@ -3,22 +3,18 @@ name: Sync Branch
 on:
  workflow_dispatch:
    inputs:
-    base_branch:
-      description: 'The base branch to sync from'
+    baseBranch:
+      description: 'Base branch'
       required: true
       default: 'dev'
-    target_branch:
-      description: 'The target branch to sync to'
+    targetBranch:
+      description: 'Target branch'
       required: true
       default: 'main'
     reviewers:
-      description: 'Comma-separated list of reviewers'
-      required: false
-      default: ''
-    merge_strategy:
-      description: 'Merge strategy (merge, squash, rebase)'
-      required: false
-      default: 'merge'
+      description: "Reviewer"
+      type: string
+      default: ""
 
 jobs:
   create_pr:
@@ -26,31 +22,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Set up GitHub CLI
-        uses: actions/setup-gh@v1
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Check for existing PR and create if not exists
-        run: |
-          base_branch="${{ github.event.inputs.base_branch }}"
-          target_branch="${{ github.event.inputs.target_branch }}"
-          repo="${{ github.repository }}"
-
-          pr_exists=$(gh pr list --base "$target_branch" --head "$base_branch" --repo "$repo" --json number --jq '.[0].number')
-
-          if [ -n "$pr_exists" ]; then
-            echo "A pull request already exists: #$pr_exists"
-          else
-            gh pr create --base "$target_branch" --head "$base_branch" --title "Sync from $base_branch to $target_branch" --body "This PR synchronizes changes from $base_branch to $target_branch." --repo "$repo"
-            echo "Pull request created successfully."
-            
-            if [ -n "$reviewers" ]; then
-              IFS=',' read -r -a reviewers_array <<< "$reviewers"
-              for reviewer in "${reviewers_array[@]}"; do
-                gh pr review-request --repo "$repo" --add "$reviewer" "$pr_url"
-              done
-            fi
-
-            gh pr merge "$pr_url" --"$merge_strategy" --repo "$repo"
-          fi          
+          title: 'Sync from ${{ inputs.baseBranch }} to ${{ inputs.targetBranch }}'
+          reviewers: ${{ inputs.reviewers }}
+          base: ${{ inputs.baseBranch }}
+          branch: ${{ inputs.targetBranch }}
+          
         
