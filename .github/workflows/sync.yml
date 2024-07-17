@@ -15,10 +15,6 @@ on:
       description: 'Comma-separated list of reviewers'
       required: false
       default: ''
-    merge_strategy:
-      description: 'Merge strategy (merge, squash, rebase)'
-      required: false
-      default: 'merge'
 
 jobs:
   create_pr:
@@ -47,8 +43,6 @@ jobs:
             --reviewer "$reviewers"
             
             echo "Pull request created successfully."
-
-            gh pr merge "$pr_url" --"$merge_strategy" --repo "$repo"
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
