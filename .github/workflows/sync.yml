@@ -1,4 +1,4 @@
-name: Create Pull Request from dev to main
+name: Sync Branch
 
 on:
  workflow_dispatch:
@@ -28,5 +28,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           title: 'Sync from ${{ baseBranch }} to ${{ targetBranch }}'
           reviewers: ${{ reviewers }}
+          base: ${{ baseBranch }}
+          branch: ${{ targetBranch }}
           
         
