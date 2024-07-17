@@ -9,7 +9,8 @@ jobs:
   dispatch_reusable_workflows:
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v3 
+    - name: Checkout repository
+      uses: actions/checkout@v4
     - uses: ./.github/workflows/dispatch_reusable_workflows.yml
       with:
         reusable_go_lint_test: ${{ vars.REUSABLE_GO_LINT_TEST_FILE }}
