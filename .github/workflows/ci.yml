@@ -7,9 +7,12 @@ on:
 
 jobs:
   dispatch_reusable_workflows:
-    uses: ./.github/workflows/dispatch_reusable_workflows.yml
-    with:
-      reusable_go_lint_test: ${{ vars.REUSABLE_GO_LINT_TEST_FILE }}
-      reusable_docker_pipeline: ${{ vars.REUSABLE_DOCKER_PIPELINE_URL }}
-      publish: false
-      dockerfile: ./contrib/images/staking-api-service/Dockerfile
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v3 
+    - uses: ./.github/workflows/dispatch_reusable_workflows.yml
+      with:
+        reusable_go_lint_test: ${{ vars.REUSABLE_GO_LINT_TEST_FILE }}
+        reusable_docker_pipeline: ${{ vars.REUSABLE_DOCKER_PIPELINE_URL }}
+        publish: false
+        dockerfile: ./contrib/images/staking-api-service/Dockerfile
