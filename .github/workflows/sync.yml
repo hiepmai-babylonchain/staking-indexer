@@ -26,9 +26,9 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          title: 'Sync from ${{ baseBranch }} to ${{ targetBranch }}'
-          reviewers: ${{ reviewers }}
-          base: ${{ baseBranch }}
-          branch: ${{ targetBranch }}
+          title: 'Sync from ${{ inputs.baseBranch }} to ${{ inputs.targetBranch }}'
+          reviewers: ${{ inputs.reviewers }}
+          base: ${{ inputs.baseBranch }}
+          branch: ${{ inputs.targetBranch }}
           
         
