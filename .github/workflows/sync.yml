@@ -22,6 +22,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Test diff
+        run: |
+          base_branch="${{ github.event.inputs.base_branch }}"
+          target_branch="${{ github.event.inputs.target_branch }}"
+          gh pr diff $base_branch..$target_branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Check for existing PR and create if not exists
         run: |
           base_branch="${{ github.event.inputs.base_branch }}"
