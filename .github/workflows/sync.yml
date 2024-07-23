@@ -1,0 +1,65 @@
+name: Sync Branch
+
+on:
+ workflow_dispatch:
+   inputs:
+    base_branch:
+      description: 'The base branch to sync from'
+      required: true
+      default: 'dev'
+    target_branch:
+      description: 'The target branch to sync to'
+      required: true
+      default: 'main'
+    reviewers:
+      description: 'Comma-separated list of reviewers'
+      required: false
+      default: ''
+
+jobs:
+  create_pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check for differences
+        id: check_diff
+        run: |
+          base_branch=${{ inputs.base_branch }}
+          target_branch=${{ inputs.target_branch }}
+
+          if git diff --quiet origin/$base_branch..origin/$target_branch; then
+            echo "No differences found between $base_branch and $target_branch."
+            echo "no_diff=true" >> $GITHUB_ENV
+          else
+            echo "Differences found between $base_branch and $target_branch."
+            echo "no_diff=false" >> $GITHUB_ENV
+          fi
+      - name: Check for existing PR and create if not exists
+        if: env.no_diff == 'false'
+        run: |
+          base_branch="${{ github.event.inputs.base_branch }}"
+          target_branch="${{ github.event.inputs.target_branch }}"
+          reviewers="${{ github.event.inputs.reviewers }}"
+          repo="${{ github.repository }}"
+          merge_strategy="${{ github.event.inputs.merge_strategy }}"
+
+          pr_exists=$(gh pr list --base "$target_branch" --head "$base_branch" --repo "$repo" --json number --jq '.[0].number')
+
+          if [ -n "$pr_exists" ]; then
+            echo "A pull request already exists: #$pr_exists"
+          else
+            gh pr create --base "$target_branch" \
+            --head "$base_branch" \
+            --title "Sync from $base_branch to $target_branch" \
+            --body "This PR synchronizes changes from $base_branch to $target_branch." \
+            --repo "$repo" \
+            --reviewer "$reviewers"
+            
+            echo "Pull request created successfully."
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
