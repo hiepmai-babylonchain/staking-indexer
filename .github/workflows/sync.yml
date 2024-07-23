@@ -22,14 +22,23 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Test diff
+        with:
+          fetch-depth: 0
+      - name: Check for differences
+        id: check_diff
         run: |
-          base_branch="${{ github.event.inputs.base_branch }}"
-          target_branch="${{ github.event.inputs.target_branch }}"
-          gh pr diff $base_branch..$target_branch
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          base_branch=${{ inputs.base_branch }}
+          target_branch=${{ inputs.target_branch }}
+
+          if git diff --quiet origin/$base_branch..origin/$target_branch; then
+            echo "No differences found between $base_branch and $target_branch."
+            echo "no_diff=true" >> $GITHUB_ENV
+          else
+            echo "Differences found between $base_branch and $target_branch."
+            echo "no_diff=false" >> $GITHUB_ENV
+          fi
       - name: Check for existing PR and create if not exists
+        if: env.no_diff == 'false'
         run: |
           base_branch="${{ github.event.inputs.base_branch }}"
           target_branch="${{ github.event.inputs.target_branch }}"
